@@ -2,6 +2,8 @@
 
 This operator provides a CRD that is used to hold inventory records in the hub cluster, and a controller that reconciles inventory with resources in the managed cluster. The actual placement of resources from hub to managed cluster is done using either hive's SyncSet or MCM.
 
+Read more in the [architecture](docs/architecture.md) document.
+
 ## Start a managed cluster named cluster0
 ```
 minikube start -p cluster0
