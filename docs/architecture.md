@@ -63,7 +63,7 @@ or user to query for inventory that is intended for use as a particular role.
 
 When a BareMetalAsset gets assigned to a cluster, the `Spec.ClusterName` is
 used as the value for a label with key `midas.io/cluster`. This enables a
-cluster management application to or user to query for inventory that is
+cluster management application or user to query for inventory that is
 associated with a particular cluster.
 
 ### Status
