@@ -82,7 +82,7 @@ of the management application that coordinates the lifecycle of clusters.
 
 ### Creation
 
-A real piece of hardware is tracked in a user CMDB or similar system. It is
+A real piece of hardware is tracked in a user configuration management database (CMDB) or similar system. It is
 physically installed in a data center. Some tool or automation uses a record in
 the CMDB to create a BareMetalAsset and corresponding Secret in a hub cluster.
 
