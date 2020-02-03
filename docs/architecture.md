@@ -55,6 +55,25 @@ Spec.
 
 To remove a BareMetalAsset from a cluster, set its `ClusterName` to `""`.
 
+### Name
+
+The BareMetalHost on the managed cluster will get the same name as its
+corresponding BareMetalAsset on the hub. In cases where the BareMetalHost is
+being created on the managed cluster during installation, or any other case
+where it is not created by the inventory controller, it is important that the
+name be set to match the BareMetalAsset.
+
+### Role
+
+The Role can be either "worker", "master", or "". When a management application
+is looking for available BareMetalAssets to add to a cluster, it will know
+which role it is trying to fill. It should prefer to use BareMetalAssets whose
+role equals the desired role, and if none are found it can use BareMetalAssets
+with no role.
+
+A BareMetalAsset with a specified role should not be used to fill a different
+role.
+
 ### Labels
 
 When a BareMetalAsset gets created, the `Spec.Role` is used as the value for a
@@ -72,6 +91,41 @@ The status will expose these conditions:
 * Has the required credentials secret been found?
 * Is creation of the BareMetalHost on the managed cluster in progress?
 * Has the BareMetalHost been created on the managed cluster?
+
+## Alternative APIs
+
+Other options were considered for the API.
+
+### BareMetalHost
+
+We considered using a sparse BareMetalHost on the hub as the inventory data
+structure. These are the main reasons not to do that:
+
+* The BMH API includes many features that wouldn't be supported on the hub,
+  such as provisioning an image, turning power on and off, etc. It's awkward to
+  expose those APIs without implementing the behavior.
+* The BMH status doesn't make sense for inventory.
+* One hub cluster may need to eventually be able to populate multiple versions
+  of the BMH API onto clusters that are at different versions. Tracking the BMH
+  CRD on the hub vs. what versions are on each cluster could get complex.
+* Then consider that the hub itself may have real BMHs in use as its own Nodes
+  with its own baremetal-operator. Not only would that make the versioning
+  matrix more complex; it means the same API would have vastly different
+  behaviors on the same cluster depending on what namespace a resource was in.
+  It also means the inventory controller would have to just work with whatever
+  BMH CRD version was in use by its local baremetal-operator.
+
+### Secret
+
+A BareMetalAsset does not contain a large number of fields in its `Spec`.
+Rather than have both a BareMetalAsset and a Secret to hold BMC credentials, we
+could put all of the inventory information into the Secret. This would halve
+the number of keys that need to be stored in etcd.
+
+Reasons not to do this:
+* There would be no clear opportunity to represent status.
+* The data model would not be concretetely structured, making validation
+  more difficult.
 
 ## Controller
 
