@@ -7,7 +7,7 @@ import (
 )
 
 // ManagedClusterResourceNamespace is the namespace on the managed cluster where BareMetalHosts are placed.
-const ManagedClusterResourceNamespace string = "openshift-machine-api"
+const ManagedClusterResourceNamespace string = "metal3"
 
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
